@@ -14,13 +14,24 @@ public class Game extends Canvas implements KeyListener {
 	private boolean running = false;
 	private Player player;
 	private ObstacleHandler obstacleHandler;
+	private CloudHandler cloudHandler;
+	private Score score;
+
+	private enum State {
+		PLAYING,
+		NOT_PLAYING,
+		GAME_OVER
+	}
+
+	private State state = State.NOT_PLAYING;
 
 	public Game() {
 		// empty constructor for now, we'll use it later
 		player = new Player();
 		obstacleHandler = new ObstacleHandler();
-
+		cloudHandler = new CloudHandler();
 		addKeyListener(this);
+		score = new Score();
 	}
 
 	public static void main(String[] args) {
@@ -40,6 +51,7 @@ public class Game extends Canvas implements KeyListener {
 		int frames = 0;
 
 		running = true;
+		state = State.NOT_PLAYING;
 
 		while (running) {
 			long now = System.nanoTime();
@@ -79,26 +91,39 @@ public class Game extends Canvas implements KeyListener {
 		g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 		g.setColor(Color.BLACK);
 		g.drawLine(0, GROUND_HEIGHT, GAME_WIDTH, GROUND_HEIGHT);
-		g.drawOval(GAME_WIDTH/2, GAME_HEIGHT/2, 10, 10);
 		player.render(g, this);
 		obstacleHandler.render(g, this);
+		cloudHandler.render(g, this);
+		score.render(g, this);
 		g.dispose();
 		bs.show();
 	}
 
 	private void tick(){
-		player.tick();
-		obstacleHandler.tick();
-		detectCollisions();
+		if (state == State.PLAYING){
+			score.tick();
+			player.tick();
+			obstacleHandler.tick();
+			cloudHandler.tick();
+			detectCollisions();
+		}
 	}
 
 	private void detectCollisions() {
 		for (Obstacle obstacle : obstacleHandler.getObstacles()) {
 			if (player.getHitBox().intersects(obstacle.getHitBox())) {
-				running = false;
+				state = State.GAME_OVER;
 				return;
 			}
 		}
+	}
+
+	private void reset(){
+		player = new Player();
+		obstacleHandler = new ObstacleHandler();
+		cloudHandler = new CloudHandler();
+		score.clear();
+		state = State.PLAYING;
 	}
 
 	@Override
@@ -110,7 +135,13 @@ public class Game extends Canvas implements KeyListener {
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_SPACE) {
-			player.jumpAction();
+			if(state == State.PLAYING){
+				player.jumpAction();
+			} else if(state == State.GAME_OVER){
+				reset();
+			} else if (state == State.NOT_PLAYING){
+				state = State.PLAYING;
+			}
 		}
 	}
 

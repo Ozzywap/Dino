@@ -25,9 +25,10 @@ public abstract class GameObject {
 
 	public void render(Graphics g, ImageObserver observer) {
 		// we subtract the sprite height because the coordinate system starts at the top-left
-		g.setColor(Color.blue);
-		g.drawRect((int) x, (int) y - sprite.getHeight(), sprite.getWidth(),
-			sprite.getHeight());
+		// mapping out hit box
+//		g.setColor(Color.blue);
+//		g.drawRect((int) x, (int) y - sprite.getHeight(), sprite.getWidth(),
+//			sprite.getHeight());
 		g.drawImage(sprite, (int) x, (int) y - sprite.getHeight(), observer);
 	}
 

@@ -3,9 +3,9 @@ import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ObstacleHandler {
+public class CloudHandler {
 
-	private ArrayList<Obstacle> obstacles = new ArrayList<>();
+	private ArrayList<Cloud> clouds = new ArrayList<>();
 
 	private float dx = -3;
 	private float ddx = -0.001f;
@@ -17,16 +17,16 @@ public class ObstacleHandler {
 		double rand = random.nextDouble();
 
 		if (rand < 0.01 && System.currentTimeMillis() - lastObst > 600) {
-			obstacles.add(new Obstacle());
+			clouds.add(new Cloud());
 			lastObst = System.currentTimeMillis();
 		}
 
-		for (Obstacle obstacle : obstacles) {
-			obstacle.dx = dx;
-			obstacle.tick();
+		for (Cloud cloud : clouds) {
+			cloud.dx = dx;
+			cloud.tick();
 
-			if (obstacle.x < -100) {
-				obstacles.remove(obstacle);
+			if (cloud.x < -100) {
+				clouds.remove(cloud);
 				break;
 			}
 		}
@@ -34,13 +34,13 @@ public class ObstacleHandler {
 	}
 
 	public void render(Graphics g, ImageObserver observer) {
-		for (Obstacle obstacle : obstacles) {
-			obstacle.render(g, observer);
+		for (Cloud cloud : clouds) {
+			cloud.render(g, observer);
 		}
 	}
 
-	public ArrayList<Obstacle> getObstacles() {
-		return new ArrayList<>(obstacles);
+	public ArrayList<Cloud> getClouds() {
+		return new ArrayList<>(clouds);
 	}
 
 }
