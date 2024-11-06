@@ -46,4 +46,8 @@ public abstract class GameObject {
 		hitBox.setLocation((int) x, (int) y - sprite.getHeight());
 		return hitBox;
 	}
+
+	public void setX(float x) {
+		this.x = x;
+	}
 }

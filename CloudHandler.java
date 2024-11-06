@@ -16,7 +16,7 @@ public class CloudHandler {
 	public void tick() {
 		double rand = random.nextDouble();
 
-		if (rand < 0.01 && System.currentTimeMillis() - lastObst > 600) {
+		if (rand < 0.05 && System.currentTimeMillis() - lastObst > 600) {
 			clouds.add(new Cloud());
 			lastObst = System.currentTimeMillis();
 		}

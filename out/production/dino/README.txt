@@ -4,3 +4,11 @@ improvements
 - minimum distance between 2 obstacles
 - start menu
 - game over screen
+- add sound effects and music
+- add bird obstacle
+- abstract obstacle handler class
+- add pause option
+
+to complete game
+- swap dino sprites
+- game over screen

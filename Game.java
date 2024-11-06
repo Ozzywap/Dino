@@ -16,6 +16,7 @@ public class Game extends Canvas implements KeyListener {
 	private ObstacleHandler obstacleHandler;
 	private CloudHandler cloudHandler;
 	private Score score;
+	private GameOver gameOver;
 
 	private enum State {
 		PLAYING,
@@ -32,6 +33,7 @@ public class Game extends Canvas implements KeyListener {
 		cloudHandler = new CloudHandler();
 		addKeyListener(this);
 		score = new Score();
+		gameOver = new GameOver();
 	}
 
 	public static void main(String[] args) {
@@ -95,6 +97,9 @@ public class Game extends Canvas implements KeyListener {
 		obstacleHandler.render(g, this);
 		cloudHandler.render(g, this);
 		score.render(g, this);
+		if(state == State.GAME_OVER){
+			gameOver.render(g, this);
+		}
 		g.dispose();
 		bs.show();
 	}
@@ -113,6 +118,7 @@ public class Game extends Canvas implements KeyListener {
 		for (Obstacle obstacle : obstacleHandler.getObstacles()) {
 			if (player.getHitBox().intersects(obstacle.getHitBox())) {
 				state = State.GAME_OVER;
+				player.setAlive(false);
 				return;
 			}
 		}
